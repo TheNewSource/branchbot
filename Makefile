@@ -36,3 +36,5 @@ docker-release: release
 	@echo "+ $@"
 	docker build -t dantoml/branchbot:${VERSION}-${BUILD_NUM} .
 	docker push dantoml/branchbot:${VERSION}-${BUILD_NUM}
+	docker build -t dantoml/branchbot:latest .
+	docker push dantoml/branchbot:latest
