@@ -13,6 +13,7 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.9
+    working_directory: /go/src/github.com/dantoml/branchbot
     steps:
       - checkout
       - run: make build
@@ -20,6 +21,7 @@ jobs:
   release:
     docker:
       - image: circleci/golang:1.9
+    working_directory: /go/src/github.com/dantoml/branchbot
     steps:
       - checkout
       - setup_remote_docker
@@ -42,5 +44,5 @@ jobs:
             BUILD_NUM=$CIRCLE_BUILD_NUM make docker-release
 
       - store_artifacts:
-          path: ~/branchbot/build/release
+          path: /go/src/github.com/dantoml/branchbot/build/release
           destination: binaries
