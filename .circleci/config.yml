@@ -5,8 +5,10 @@ workflows:
       - build
       - release:
           filters:
+            branches:
+              ignore: /.*/
             tags:
-              only: "*.*.*"
+              only: /*.*.*/
 
 version: 2
 jobs:
