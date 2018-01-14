@@ -1,0 +1,46 @@
+workflows:
+  version: 2
+  build_and_release:
+    jobs:
+      - build
+      - release:
+          filters:
+            tags:
+              only: "*.*.*"
+
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.9
+    steps:
+      - checkout
+      - run: make build
+
+  release:
+    docker:
+      - image: circleci/golang:1.9
+    steps:
+      - checkout
+      - setup_remote_docker
+
+      - run:
+          name: Install docker 1.17
+          command: |
+            set -ex
+            curl -L -o /tmp/docker-1.17.5.tgz https://get.docker.com/builds/Linux/x86_64/docker-1.17.5.tgz
+            tar -xz -C /tmp -f /tmp/docker-1.17.5.tgz
+            mv /tmp/docker/* /usr/bin
+
+      - run:
+          name: Docker Login
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+
+      - run:
+          name: Docker Release
+          command: |
+            BUILD_NUM=$CIRCLE_BUILD_NUM make docker-release
+
+      - store_artifacts:
+          path: ~/branchbot/build/release
+          destination: binaries

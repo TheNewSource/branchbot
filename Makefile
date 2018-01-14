@@ -30,3 +30,9 @@ endef
 release: *.go
 	@echo "+ $@"
 	$(foreach GOOSARCH,$(GOOSARCHES), $(call buildrelease,$(subst /,,$(dir $(GOOSARCH))),$(notdir $(GOOSARCH))))
+
+.PHONY: docker-release
+docker-release: release
+	@echo "+ $@"
+	docker build -t dantoml/branchbot:${VERSION}-${BUILD_NUM} .
+	docker push dantoml/branchbot:${VERSION}-${BUILD_NUM}
