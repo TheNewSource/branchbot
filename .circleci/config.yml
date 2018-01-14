@@ -8,9 +8,7 @@ workflows:
             - build
           filters:
             branches:
-              ignore: /.*/
-            tags:
-              only: /*.*.*/
+              only: master
 
 version: 2
 jobs:
